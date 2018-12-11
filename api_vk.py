@@ -72,6 +72,9 @@ class User:
                     break
         
         return mutual_friends_list
+
+    def __str__(self):
+        return '\nhttps://vk.com/id' + str(user1.getId(user1_nickname)['response'][0]['id'])
         
 if __name__ == "__main__":
     print(' \n')
@@ -92,5 +95,4 @@ if __name__ == "__main__":
     else:
         print('\nНеправильный ввод')
 
-    User = '\nhttps://vk.com/id{}\n'.format(str(user1.getId(user1_nickname)['response'][0]['id']))
-    print(User)
+    print(user1)
