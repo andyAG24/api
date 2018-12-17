@@ -4,7 +4,7 @@ import requests
 APP_ID = 6775368
 AUTH_URL = 'https://oauth.vk.com/authorize?'
 
-token = 'af5f312d6b2e1c74163cca2d2ce6f1e71390d32fcced6463c1f5b2a1d6fa712771cbc0a3d135ccf89cfc8'
+token = '66abd0d86143f964120b946a4c3e879fc20e5c36b7818cd812185f7d0cd9dfba867f6cb1f2afe066a0dec'
 
 service_token = 'fc722e7afc722e7afc722e7acbfc154c32ffc72fc722e7aa07870048263346b0c441e79'
 
@@ -22,7 +22,7 @@ params = {
     'v': '5.92' 
 }
 
-# print(AUTH_URL + (urlencode(auth_data)))
+print(AUTH_URL + (urlencode(auth_data)))
 
 class User:
     def __init__(self, token):
@@ -55,18 +55,19 @@ class User:
         response = requests.get('https://api.vk.com/method/friends.get', params)
         return response.json()
 
-    def __and__(self, user1, user2):
-        user1_info = self.getId(user1)
-        user1_id = user1_info['response'][0]['id']
-        user1_friends = self.friendsId(service_token, user1_id)['response']['items']
+    def __and__(self, other):
+        self_info = self.getId(user1_nickname)
+        self_id = self_info['response'][0]['id']
+        self_friends = self.friendsId(service_token, self_id)['response']['items']
 
-        user2_info = self.getId(user2)
-        user2_id = user2_info['response'][0]['id']
-        user2_friends = self.friendsId(service_token, user2_id)['response']['items']
+        other = User(token)
+        other_info = other.getId(user2_nickname)
+        other_id = other_info['response'][0]['id']
+        other_friends = self.friendsId(service_token, other_id)['response']['items']
 
         mutual_friends_list = []
-        for i in user1_friends:
-            for k in user2_friends:
+        for i in self_friends:
+            for k in other_friends:
                 if i == k:
                     mutual_friends_list.append(i)
                     break
@@ -76,6 +77,7 @@ class User:
     def __str__(self):
         return '\nhttps://vk.com/id' + str(user1.getId(user1_nickname)['response'][0]['id'])
         
+        
 if __name__ == "__main__":
     print(' \n')
 
@@ -84,15 +86,18 @@ if __name__ == "__main__":
     mutual_friends_list = me.getMutualFriends(target_uid)
     print('Общие друзья через API:', me.getMutualFriends(target_uid)['response'])  # Получение списка общих друзей с помощью api vk
 
-    line_list = input('\nВведите пользователей: ').split(' ')
+    line_list = input('\nВведите пользователей через пробел: ').split(' ')
 
     if line_list[1] == '&':
         user1_nickname = line_list[0]
         user2_nickname = line_list[2]
 
         user1 = User(token)
-        print('\nОбщие друзья:', user1.__and__(user1_nickname, user2_nickname))
+        user2 = user2_nickname
+        print('\nОбщие друзья:', user1 & user2)
     else:
         print('\nНеправильный ввод')
 
     print(user1)
+
+
