@@ -60,7 +60,6 @@ class User:
         self_id = self_info['response'][0]['id']
         self_friends = self.friendsId(service_token, self_id)['response']['items']
 
-        other = User(token)
         other_info = other.getId(user2_nickname)
         other_id = other_info['response'][0]['id']
         other_friends = self.friendsId(service_token, other_id)['response']['items']
@@ -93,7 +92,7 @@ if __name__ == "__main__":
         user2_nickname = line_list[2]
 
         user1 = User(token)
-        user2 = user2_nickname
+        user2 = User(token)
         print('\nОбщие друзья:', user1 & user2)
     else:
         print('\nНеправильный ввод')
